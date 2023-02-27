@@ -1,5 +1,6 @@
-import { Post } from './entities/Post';
 import { MikroORM } from '@mikro-orm/core';
+import { Post } from './entities/Post';
+import { User } from './entities/User';
 
 export default {
   migrations: {
@@ -7,7 +8,7 @@ export default {
     pathTs: './src/migrations',
     glob: '!(*.d).{js,ts}',
   },
-  entities: [Post],
+  entities: [Post, User],
   dbName: 'litepost',
   type: 'postgresql',
   debug: true,
