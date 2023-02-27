@@ -1,7 +1,7 @@
 import { MikroORM } from '@mikro-orm/core';
 import dotenv from 'dotenv';
 import mikroOrmConfig from './mikro-orm.config';
-import express, { json } from 'express';
+import express, { json, Request, Response } from 'express';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { buildSchema } from 'type-graphql';
@@ -29,11 +29,13 @@ dotenv.config();
     '/graphql',
     cors<cors.CorsRequest>(),
     json(),
-    expressMiddleware(apolloServer)
+    expressMiddleware(apolloServer, {
+      context: async () => ({ em }),
+    })
   );
 
   app.listen(process.env.PORT, () => {
-    console.log('wokr');
+    console.log('WORKING-------------------------');
   });
 })().catch((err) => {
   console.error(err);
