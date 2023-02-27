@@ -11,6 +11,6 @@ export default {
   dbName: 'litepost',
   type: 'postgresql',
   debug: true,
-  user: 'postgres',
-  password: 'postgres',
+  user: 'postgres', //!!!!!!!!!
+  password: 'postgres', //!!!!!!!!!
 } as Parameters<typeof MikroORM.init>[0];
