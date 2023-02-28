@@ -8,8 +8,8 @@ import cors from 'cors';
 import { PostResolver } from './resolvers/post';
 import { UserResolver } from './resolvers/user';
 import { createClient } from 'redis';
-import session from 'express-session';
 import connectRedis from 'connect-redis';
+import session from 'express-session';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 (async () => {
