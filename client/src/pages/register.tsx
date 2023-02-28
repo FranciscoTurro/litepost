@@ -1,4 +1,6 @@
+import { gql, useMutation } from '@apollo/client';
 import { FormEvent, useState } from 'react';
+import { useRegisterMutation } from '../../generated-types';
 
 interface IUser {
   username: string;
@@ -6,11 +8,15 @@ interface IUser {
 }
 
 const Register = () => {
+  const [mutateFunction, { data, error, loading }] = useRegisterMutation();
+
   const [user, setUser] = useState<IUser>({ username: '', password: '' });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(user);
+    return mutateFunction({
+      variables: { username: user.username, password: user.password },
+    });
   };
 
   return (

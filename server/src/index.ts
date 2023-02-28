@@ -59,7 +59,10 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 
   app.use(
     '/graphql',
-    cors<cors.CorsRequest>(),
+    cors<cors.CorsRequest>({
+      origin: 'http://localhost:3000',
+      credentials: true,
+    }),
     json(),
     expressMiddleware(apolloServer, {
       context: async ({ req, res }) => ({ req, res, em }), //lets resolvers use whatever i pass
