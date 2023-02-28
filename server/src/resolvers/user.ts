@@ -6,6 +6,7 @@ import {
   InputType,
   Field,
   ObjectType,
+  Query,
 } from 'type-graphql';
 import { MyContext } from '../types';
 import argon2 from 'argon2';
@@ -38,9 +39,16 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+  @Query(() => User, { nullable: true })
+  async currentUser(@Ctx() { req, em }: MyContext) {
+    if (!req.session.userId) return null;
+    const user = await em.findOne(User, req.session.userId);
+    return user;
+  }
+
   @Mutation(() => UserResponse)
   async registerUser(
-    @Ctx() { em }: MyContext,
+    @Ctx() { em, req }: MyContext,
     @Arg('options', () => UserInput) options: UserInput
   ): Promise<UserResponse> {
     if (options.username.length === 0)
@@ -64,12 +72,15 @@ export class UserResolver {
           errors: [{ field: 'username', message: 'username already taken' }],
         };
     }
+
+    req.session.userId = user._id;
+
     return { user };
   }
 
   @Mutation(() => UserResponse)
   async loginUser(
-    @Ctx() { em }: MyContext,
+    @Ctx() { em, req }: MyContext,
     @Arg('options', () => UserInput) options: UserInput
   ): Promise<UserResponse> {
     const user = await em.findOne(User, { username: options.username });
@@ -82,6 +93,8 @@ export class UserResolver {
       return {
         errors: [{ field: 'password', message: 'incorrect password' }],
       };
+
+    req.session.userId = user._id;
 
     return { user };
   }

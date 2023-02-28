@@ -1,5 +1,4 @@
 import { MikroORM } from '@mikro-orm/core';
-import dotenv from 'dotenv';
 import mikroOrmConfig from './mikro-orm.config';
 import express, { json } from 'express';
 import { ApolloServer } from '@apollo/server';
@@ -8,8 +7,10 @@ import { buildSchema } from 'type-graphql';
 import cors from 'cors';
 import { PostResolver } from './resolvers/post';
 import { UserResolver } from './resolvers/user';
-
-dotenv.config();
+import { createClient } from 'redis';
+import session from 'express-session';
+import connectRedis from 'connect-redis';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 (async () => {
   const orm = await MikroORM.init(mikroOrmConfig);
@@ -18,11 +19,41 @@ dotenv.config();
 
   const app = express();
 
+  const RedisStore = connectRedis(session);
+  const redisClient = createClient({ legacyMode: true });
+  await redisClient.connect().catch(console.error);
+
+  app.use(
+    session({
+      name: 'qid',
+      store: new RedisStore({
+        client: redisClient,
+        disableTouch: true,
+      }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false, //change in prod!
+      },
+      secret: process.env.SECRET!,
+      saveUninitialized: false,
+      resave: false,
+    })
+  );
+
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [PostResolver, UserResolver],
       validate: false,
     }),
+    plugins: [
+      //remove plugins in prod!!
+      ApolloServerPluginLandingPageLocalDefault({
+        footer: false,
+        includeCookies: true,
+      }),
+    ],
   });
   await apolloServer.start();
 
@@ -31,12 +62,12 @@ dotenv.config();
     cors<cors.CorsRequest>(),
     json(),
     expressMiddleware(apolloServer, {
-      context: async () => ({ em }), //lets resolvers use whatever i pass
+      context: async ({ req, res }) => ({ req, res, em }), //lets resolvers use whatever i pass
     })
   );
 
   app.listen(process.env.PORT, () => {
-    console.log('WORKING-------------------------');
+    console.log('-------------------------RUNNING-------------------------');
   });
 })().catch((err) => {
   console.error(err);
