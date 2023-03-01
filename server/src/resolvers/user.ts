@@ -98,4 +98,19 @@ export class UserResolver {
 
     return { user };
   }
+
+  @Mutation(() => Boolean)
+  logout(@Ctx() { req, res }: MyContext) {
+    return new Promise((resolve) =>
+      req.session.destroy((error) => {
+        if (error) {
+          resolve(false);
+          return;
+        } else {
+          res.clearCookie(process.env.COOKIE_NAME!);
+          resolve(true);
+        }
+      })
+    );
+  }
 }

@@ -25,7 +25,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 
   app.use(
     session({
-      name: 'qid',
+      name: process.env.COOKIE_NAME!,
       store: new RedisStore({
         client: redisClient,
         disableTouch: true,
