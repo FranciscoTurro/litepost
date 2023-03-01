@@ -1,13 +1,16 @@
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { SubmitButton } from '../components/SubmitButton';
-import { useRegisterMutation } from '../generated/generated-types';
+import {
+  useLoginMutation,
+  useRegisterMutation,
+} from '../generated/generated-types';
 import { User } from '../types';
 
-const Register = () => {
+const Login = () => {
   const router = useRouter();
 
-  const [mutateFunction, { loading, client }] = useRegisterMutation();
+  const [mutateFunction, { loading, client }] = useLoginMutation();
 
   const [user, setUser] = useState<User>({ username: '', password: '' });
   const [usernameError, setUsernameError] = useState('');
@@ -18,12 +21,12 @@ const Register = () => {
     const response = await mutateFunction({
       variables: { username: user.username, password: user.password },
     });
-    if (response.data?.registerUser.error) {
-      if (response.data.registerUser.error.field === 'username')
-        setUsernameError(response.data.registerUser.error.message);
-      if (response.data.registerUser.error.field === 'password')
-        setPasswordError(response.data.registerUser.error.message);
-    } else if (response.data?.registerUser.user) {
+    if (response.data?.loginUser.error) {
+      if (response.data.loginUser.error.field === 'username')
+        setUsernameError(response.data.loginUser.error.message);
+      if (response.data.loginUser.error.field === 'password')
+        setPasswordError(response.data.loginUser.error.message);
+    } else if (response.data?.loginUser.user) {
       client.resetStore();
       router.push('/');
     }
@@ -32,7 +35,7 @@ const Register = () => {
   return (
     <div className="max-w-3xl w-full mt-8 mx-auto flex flex-col items-center">
       <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight mdl:text-5xl lg:text-6xl">
-        Register
+        Login
       </h1>
       <form onSubmit={handleSubmit} autoComplete="off" className="w-3/4">
         <div className="mb-6">
@@ -82,10 +85,10 @@ const Register = () => {
             ) : null}
           </div>
         </div>
-        <SubmitButton name="Register" loading={loading} />
+        <SubmitButton name="Login" loading={loading} />
       </form>
     </div>
   );
 };
 
-export default Register;
+export default Login;

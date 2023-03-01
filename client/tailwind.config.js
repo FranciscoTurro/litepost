@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        linen: '#c8b094',
         atomic_teal: {
           1: '#265b5f',
           2: '#1e494c',
