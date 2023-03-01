@@ -1,6 +1,6 @@
 mutation Register($username: String!, $password: String!) {
   registerUser(options: { username: $username, password: $password }) {
-    errors {
+    error {
       field
       message
     }

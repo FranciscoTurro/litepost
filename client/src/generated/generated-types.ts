@@ -91,7 +91,7 @@ export type UserInput = {
 
 export type UserResponse = {
   __typename?: 'UserResponse';
-  errors?: Maybe<Array<FieldError>>;
+  error?: Maybe<FieldError>;
   user?: Maybe<User>;
 };
 
@@ -101,13 +101,13 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', registerUser: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', _id: number, username: string } | null } };
+export type RegisterMutation = { __typename?: 'Mutation', registerUser: { __typename?: 'UserResponse', error?: { __typename?: 'FieldError', field: string, message: string } | null, user?: { __typename?: 'User', _id: number, username: string } | null } };
 
 
 export const RegisterDocument = gql`
     mutation Register($username: String!, $password: String!) {
   registerUser(options: {username: $username, password: $password}) {
-    errors {
+    error {
       field
       message
     }

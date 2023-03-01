@@ -31,8 +31,8 @@ class FieldError {
 @ObjectType()
 class UserResponse {
   //if there was an error, return the error, else return the user. that's why they are nullable and have a ?
-  @Field(() => [FieldError], { nullable: true })
-  errors?: FieldError[];
+  @Field(() => FieldError, { nullable: true })
+  error?: FieldError;
   @Field(() => User, { nullable: true })
   user?: User;
 }
@@ -53,11 +53,11 @@ export class UserResolver {
   ): Promise<UserResponse> {
     if (options.username.length === 0)
       return {
-        errors: [{ field: 'username', message: 'cant have an empty username' }],
+        error: { field: 'username', message: 'cant have an empty username' },
       };
     if (options.password.length === 0)
       return {
-        errors: [{ field: 'password', message: 'cant have an empty password' }],
+        error: { field: 'password', message: 'cant have an empty password' },
       };
     const hashedPass = await argon2.hash(options.password);
     const user = em.create(User, {
@@ -69,7 +69,7 @@ export class UserResolver {
     } catch (error) {
       if (error.code === '23505')
         return {
-          errors: [{ field: 'username', message: 'username already taken' }],
+          error: { field: 'username', message: 'username already taken' },
         };
     }
 
@@ -86,12 +86,12 @@ export class UserResolver {
     const user = await em.findOne(User, { username: options.username });
     if (!user)
       return {
-        errors: [{ field: 'username', message: 'username doesnt exist' }],
+        error: { field: 'username', message: 'username doesnt exist' },
       };
     const validPass = await argon2.verify(user.password, options.password);
     if (!validPass)
       return {
-        errors: [{ field: 'password', message: 'incorrect password' }],
+        error: { field: 'password', message: 'incorrect password' },
       };
 
     req.session.userId = user._id;

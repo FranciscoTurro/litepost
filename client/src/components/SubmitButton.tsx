@@ -11,7 +11,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
     return (
       <button
         disabled
-        className="w-36 h-12 inline-flex items-center py-2.5 px-5 text-sm font-medium text-atomic_teal-1 bg-white rounded-lg border border-atomic_teal-1 hover:bg-gray-100"
+        className="w-36 h-12 inline-flex items-center py-2.5 px-5 font-medium text-atomic_teal-1 bg-white rounded-lg border border-atomic_teal-1 hover:bg-gray-100"
       >
         <svg
           className="inline w-4 h-4 mr-3 text-gray-200 animate-spin dark:text-gray-600"
@@ -33,7 +33,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
   return (
     <button
       type="submit"
-      className="w-36 h-12 py-2.5 px-5 bg-atomic_teal-1 hover:bg-atomic_teal-2  text-white font-medium rounded-lg text-sm text-center"
+      className="w-36 h-12 py-2.5 px-5 bg-atomic_teal-1 hover:bg-atomic_teal-2  text-white font-medium rounded-lg text-center"
     >
       {name}
     </button>
