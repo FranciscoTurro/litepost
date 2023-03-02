@@ -1,6 +1,24 @@
 import { Post } from '../entities/Post';
-import { Resolver, Query, Ctx, Arg, Int, Mutation } from 'type-graphql';
-import { MyContext } from '../types';
+import {
+  Resolver,
+  Query,
+  Ctx,
+  Arg,
+  Int,
+  Mutation,
+  InputType,
+  Field,
+} from 'type-graphql';
+import { MyContext } from '../types/types';
+import { User } from '../entities/User';
+
+@InputType()
+class PostInput {
+  @Field()
+  title: string;
+  @Field()
+  text: string;
+}
 
 @Resolver()
 export class PostResolver {
@@ -19,10 +37,18 @@ export class PostResolver {
 
   @Mutation(() => Post)
   async createPost(
-    @Arg('title', () => String) title: string,
-    @Ctx() { em }: MyContext
+    @Arg('input', () => PostInput) input: PostInput,
+    @Ctx() { em, req }: MyContext
   ): Promise<Post> {
-    const post = em.create(Post, { title });
+    if (!req.session.userId) throw new Error('Not logged in!');
+    const user = await em.findOne(User, req.session.userId);
+    if (!user) throw new Error('User not found');
+
+    const post = em.create(Post, {
+      ...input,
+      creator: user,
+    });
+
     await em.persistAndFlush(post);
     return post;
   }

@@ -26,9 +26,9 @@ export const Navbar = () => {
                 {data.currentUser.username}
               </li>
               <button
-                onClick={() => {
+                onClick={async () => {
                   mutationFunction();
-                  ApolloClient.resetStore();
+                  await ApolloClient.resetStore();
                 }}
                 className="block py-2 pl-3 pr-4 rounded md:hover:bg-transparent md:border-0 md:hover:text-gray-400 md:p-0"
               >

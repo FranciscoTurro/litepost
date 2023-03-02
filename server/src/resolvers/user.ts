@@ -8,7 +8,7 @@ import {
   ObjectType,
   Query,
 } from 'type-graphql';
-import { MyContext } from '../types';
+import { MyContext } from '../types/types';
 import argon2 from 'argon2';
 import { User } from '../entities/User';
 

@@ -1,5 +1,6 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, OneToMany } from '@mikro-orm/core';
 import { ObjectType, Field, Int } from 'type-graphql';
+import { Post } from './Post';
 
 @ObjectType()
 @Entity()
@@ -8,6 +9,17 @@ export class User {
   @PrimaryKey()
   _id!: number;
 
+  @Field()
+  @Property({ type: 'text', unique: true })
+  username!: string;
+
+  @Property()
+  password!: string; //remove the field property, graphql cant see it
+
+  @Field(() => [Post])
+  @OneToMany(() => Post, (post) => post.creator)
+  posts?: Post[];
+
   @Field(() => String)
   @Property({ type: 'date' })
   createdAt? = new Date();
@@ -15,11 +27,4 @@ export class User {
   @Field(() => String)
   @Property({ type: 'date', onUpdate: () => new Date() })
   updatedAt? = new Date();
-
-  @Field()
-  @Property({ type: 'text', unique: true })
-  username!: string;
-
-  @Property()
-  password!: string; //remove the field property, graphql cant see it
 }
