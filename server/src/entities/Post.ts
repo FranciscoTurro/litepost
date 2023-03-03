@@ -15,7 +15,7 @@ export class Post {
 
   @Field()
   @Property()
-  text!: string;
+  text?: string;
 
   @Field()
   @Property({ type: 'int', default: 0 })
