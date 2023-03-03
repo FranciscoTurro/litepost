@@ -11,7 +11,7 @@ export const Navbar = () => {
   const [mutationFunction] = useLogoutMutation();
 
   return (
-    <nav className="bg-linen px-2 sm:px-4 py-2.5">
+    <nav className="bg-atomic_teal-1 px-2 sm:px-4 py-2.5">
       <div className="container flex flex-wrap items-center justify-between mx-auto">
         <Link
           className="self-center text-4xl font-bold whitespace-nowrap"

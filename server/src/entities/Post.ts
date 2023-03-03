@@ -21,6 +21,7 @@ export class Post {
   @Property({ type: 'int', default: 0 })
   points?: number;
 
+  @Field()
   @ManyToOne(() => User)
   creator: User;
 

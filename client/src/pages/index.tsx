@@ -1,4 +1,3 @@
-import { Navbar } from '../components/Navbar';
 import { useGetPostsQuery } from '../generated/generated-types';
 
 const Home = () => {
@@ -6,7 +5,6 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
       <div>main page</div>
       <br />
       {data

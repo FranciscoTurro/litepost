@@ -8,9 +8,11 @@ import {
   Mutation,
   InputType,
   Field,
+  UseMiddleware,
 } from 'type-graphql';
 import { MyContext } from '../types/types';
 import { User } from '../entities/User';
+import { isAuth } from '../middleware/isAuth';
 
 @InputType()
 class PostInput {
@@ -36,12 +38,12 @@ export class PostResolver {
   }
 
   @Mutation(() => Post)
+  @UseMiddleware(isAuth)
   async createPost(
     @Arg('input', () => PostInput) input: PostInput,
     @Ctx() { em, req }: MyContext
   ): Promise<Post> {
-    if (!req.session.userId) throw new Error('Not logged in!');
-    const user = await em.findOne(User, req.session.userId);
+    const user = await em.findOne(User, req.session.userId!);
     if (!user) throw new Error('User not found');
 
     const post = em.create(Post, {

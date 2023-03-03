@@ -16,7 +16,6 @@ export class User {
   @Property()
   password!: string; //remove the field property, graphql cant see it
 
-  @Field(() => [Post])
   @OneToMany(() => Post, (post) => post.creator)
   posts?: Post[];
 
