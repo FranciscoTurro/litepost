@@ -13,6 +13,7 @@ import {
 import { MyContext } from '../types/types';
 import { User } from '../entities/User';
 import { isAuth } from '../middleware/isAuth';
+import { Loaded } from '@mikro-orm/core';
 
 @InputType()
 class PostInput {
@@ -25,8 +26,29 @@ class PostInput {
 @Resolver()
 export class PostResolver {
   @Query(() => [Post])
-  getPosts(@Ctx() { em }: MyContext): Promise<Post[]> {
-    return em.find(Post, {});
+  async getPosts(
+    @Arg('limit', () => Int) limit: number,
+    @Arg('cursor', () => String, { nullable: true }) cursor: string | null,
+    @Ctx() { em }: MyContext
+  ): Promise<Post[]> {
+    const cappedLimit = Math.min(50, limit);
+
+    let posts: Loaded<Post, never>[];
+    if (cursor) {
+      posts = await em.find(
+        Post,
+        { createdAt: { $lt: new Date(parseInt(cursor)) } },
+        { orderBy: { createdAt: 'DESC' }, limit: cappedLimit }
+      );
+    } else {
+      posts = await em.find(
+        Post,
+        {},
+        { orderBy: { createdAt: 'DESC' }, limit: cappedLimit }
+      );
+    }
+
+    return posts;
   }
 
   @Query(() => Post, { nullable: true })
@@ -45,6 +67,9 @@ export class PostResolver {
   ): Promise<Post> {
     const user = await em.findOne(User, req.session.userId!);
     if (!user) throw new Error('User not found');
+
+    if (input.title.length === 0)
+      throw new Error('Cant have an empty post title');
 
     const post = em.create(Post, {
       ...input,

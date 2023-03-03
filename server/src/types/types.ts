@@ -1,8 +1,15 @@
-import { EntityManager, IDatabaseDriver, Connection } from '@mikro-orm/core';
 import { Request, Response } from 'express';
+import {
+  AbstractSqlConnection,
+  AbstractSqlDriver,
+  AbstractSqlPlatform,
+  EntityManager,
+} from '@mikro-orm/postgresql';
 
 export type MyContext = {
-  em: EntityManager<IDatabaseDriver<Connection>>;
+  em: EntityManager<
+    AbstractSqlDriver<AbstractSqlConnection, AbstractSqlPlatform>
+  >;
   req: Request;
   res: Response;
 };

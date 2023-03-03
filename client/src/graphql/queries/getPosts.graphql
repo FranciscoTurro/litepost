@@ -1,5 +1,5 @@
-query GetPosts {
-  getPosts {
+query GetPosts($limit: Int!, $cursor: String) {
+  getPosts(limit: $limit, cursor: $cursor) {
     _id
     createdAt
     title
