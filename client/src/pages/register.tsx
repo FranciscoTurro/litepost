@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { SubmitButton } from '../components/SubmitButton';
 import { useRegisterMutation } from '../generated/generated-types';
-import { User } from '../types/types';
+import { UserInput as User } from '../generated/generated-types';
 
 const Register = () => {
   const router = useRouter();

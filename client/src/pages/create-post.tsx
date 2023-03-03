@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { SubmitButton } from '../components/SubmitButton';
 import { useCreatePostMutation } from '../generated/generated-types';
-import { Post } from '../types/types';
+import { PostInput as Post } from '../generated/generated-types';
 import { useIsAuth } from '../utils/useIsAuth';
 
 const CreatePost = () => {
