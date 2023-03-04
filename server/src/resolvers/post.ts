@@ -11,6 +11,7 @@ import {
   UseMiddleware,
   FieldResolver,
   Root,
+  ObjectType,
 } from 'type-graphql';
 import { MyContext } from '../types/types';
 import { User } from '../entities/User';
@@ -25,6 +26,14 @@ class PostInput {
   text: string;
 }
 
+@ObjectType()
+class PaginatedPosts {
+  @Field(() => [Post])
+  posts: Post[];
+  @Field()
+  hasMore: boolean;
+}
+
 @Resolver(Post)
 export class PostResolver {
   @FieldResolver(() => String)
@@ -32,20 +41,25 @@ export class PostResolver {
     return root.text?.slice(0, 50);
   }
 
-  @Query(() => [Post])
+  @Query(() => PaginatedPosts)
   async getPosts(
     @Arg('limit', () => Int) limit: number,
     @Arg('cursor', () => String, { nullable: true }) cursor: string | null,
     @Ctx() { em }: MyContext
-  ): Promise<Post[]> {
+  ): Promise<PaginatedPosts> {
     const cappedLimit = Math.min(50, limit);
+    const cappedLimitPlusOne = cappedLimit + 1;
+
+    const replacements: any[] = [cappedLimitPlusOne];
 
     let posts: Loaded<Post, never>[];
     if (cursor) {
+      replacements.push(new Date(parseInt(cursor)));
+
       posts = await em.find(
         Post,
-        { createdAt: { $lt: new Date(parseInt(cursor)) } },
-        { orderBy: { createdAt: 'DESC' }, limit: cappedLimit }
+        { createdAt: { $lt: replacements[1] } },
+        { orderBy: { createdAt: 'DESC' }, limit: replacements[0] }
       );
     } else {
       posts = await em.find(
@@ -55,7 +69,10 @@ export class PostResolver {
       );
     }
 
-    return posts;
+    return {
+      posts: posts.slice(0, cappedLimit),
+      hasMore: posts.length === cappedLimitPlusOne,
+    };
   }
 
   @Query(() => Post, { nullable: true })

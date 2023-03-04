@@ -57,6 +57,12 @@ export type MutationUpdatePostArgs = {
   title?: InputMaybe<Scalars['String']>;
 };
 
+export type PaginatedPosts = {
+  __typename?: 'PaginatedPosts';
+  hasMore: Scalars['Boolean'];
+  posts: Array<Post>;
+};
+
 export type Post = {
   __typename?: 'Post';
   _id: Scalars['Int'];
@@ -78,7 +84,7 @@ export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<User>;
   getPost?: Maybe<Post>;
-  getPosts: Array<Post>;
+  getPosts: PaginatedPosts;
 };
 
 
@@ -152,7 +158,7 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename?: 'Post', _id: number, title: string, textSnippet: string }> };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', _id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string }> } };
 
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
@@ -348,9 +354,14 @@ export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, Curren
 export const GetPostsDocument = gql`
     query GetPosts($limit: Int!, $cursor: String) {
   getPosts(limit: $limit, cursor: $cursor) {
-    _id
-    title
-    textSnippet
+    hasMore
+    posts {
+      _id
+      title
+      textSnippet
+      createdAt
+      updatedAt
+    }
   }
 }
     `;
