@@ -49,23 +49,30 @@ export class PostResolver {
   ): Promise<PaginatedPosts> {
     const cappedLimit = Math.min(50, limit);
     const cappedLimitPlusOne = cappedLimit + 1;
-
-    const replacements: any[] = [cappedLimitPlusOne];
-
+    let cursorValue;
     let posts: Loaded<Post, never>[];
+
     if (cursor) {
-      replacements.push(new Date(parseInt(cursor)));
+      cursorValue = new Date(parseInt(cursor));
 
       posts = await em.find(
         Post,
-        { createdAt: { $lt: replacements[1] } },
-        { orderBy: { createdAt: 'DESC' }, limit: replacements[0] }
+        { createdAt: { $lt: cursorValue } },
+        {
+          orderBy: { createdAt: 'DESC' },
+          limit: cappedLimitPlusOne,
+          populate: ['creator'] as const,
+        }
       );
     } else {
       posts = await em.find(
         Post,
         {},
-        { orderBy: { createdAt: 'DESC' }, limit: replacements[0] }
+        {
+          orderBy: { createdAt: 'DESC' },
+          limit: cappedLimitPlusOne,
+          populate: ['creator'] as const,
+        }
       );
     }
 

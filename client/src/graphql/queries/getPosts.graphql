@@ -7,6 +7,10 @@ query GetPosts($limit: Int!, $cursor: String) {
       textSnippet
       createdAt
       updatedAt
+      creator {
+        _id
+        username
+      }
     }
   }
 }

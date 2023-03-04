@@ -6,6 +6,11 @@ interface PostProps {
     textSnippet: string;
     createdAt: string;
     updatedAt: string;
+    creator: {
+      __typename?: 'User' | undefined;
+      _id: number;
+      username: string;
+    };
   };
 }
 
@@ -15,7 +20,9 @@ export const Post: React.FC<PostProps> = ({ post }) => {
       <h1 className="text-2xl font-semibold">
         {post.title} with id {post._id}
       </h1>
-      <p>{post.textSnippet}</p>
+      <p>
+        {post.textSnippet} created by {post.creator.username}
+      </p>
     </div>
   );
 };
