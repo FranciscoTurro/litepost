@@ -65,7 +65,7 @@ export class PostResolver {
       posts = await em.find(
         Post,
         {},
-        { orderBy: { createdAt: 'DESC' }, limit: cappedLimit }
+        { orderBy: { createdAt: 'DESC' }, limit: replacements[0] }
       );
     }
 

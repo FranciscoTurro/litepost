@@ -18,8 +18,6 @@ const Home = () => {
       </div>
     );
 
-  console.log(data);
-
   return (
     <div className="w-full mt-6 flex flex-col items-center">
       <div className="w-2/5 flex items-center justify-between">

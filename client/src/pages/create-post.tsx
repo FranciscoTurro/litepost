@@ -3,7 +3,10 @@ import { setMaxListeners } from 'events';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { SubmitButton } from '../components/SubmitButton';
-import { useCreatePostMutation } from '../generated/generated-types';
+import {
+  useCreatePostMutation,
+  useGetPostsQuery,
+} from '../generated/generated-types';
 import { PostInput as Post } from '../generated/generated-types';
 import { useIsAuth } from '../utils/useIsAuth';
 
@@ -23,7 +26,12 @@ const CreatePost = () => {
       setEmptyTitle(true);
       return;
     }
-    const response = await createPost({ variables: { input: post } });
+    await createPost({
+      variables: { input: post },
+      update: (cache) => {
+        cache.evict({ fieldName: 'getPosts:{}' });
+      },
+    });
     router.push('/');
   };
 
