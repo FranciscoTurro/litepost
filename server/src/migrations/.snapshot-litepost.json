@@ -176,6 +176,78 @@
           "updateRule": "cascade"
         }
       }
+    },
+    {
+      "columns": {
+        "user__id": {
+          "name": "user__id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "post__id": {
+          "name": "post__id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "value": {
+          "name": "value",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "updoot",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "updoot_pkey",
+          "columnNames": [
+            "user__id",
+            "post__id"
+          ],
+          "composite": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "updoot_user__id_foreign": {
+          "constraintName": "updoot_user__id_foreign",
+          "columnNames": [
+            "user__id"
+          ],
+          "localTableName": "public.updoot",
+          "referencedColumnNames": [
+            "_id"
+          ],
+          "referencedTableName": "public.user",
+          "updateRule": "cascade"
+        },
+        "updoot_post__id_foreign": {
+          "constraintName": "updoot_post__id_foreign",
+          "columnNames": [
+            "post__id"
+          ],
+          "localTableName": "public.updoot",
+          "referencedColumnNames": [
+            "_id"
+          ],
+          "referencedTableName": "public.post",
+          "updateRule": "cascade"
+        }
+      }
     }
   ]
 }

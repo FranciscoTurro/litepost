@@ -1,5 +1,12 @@
-import { Entity, PrimaryKey, Property, ManyToOne } from '@mikro-orm/core';
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  ManyToOne,
+  OneToMany,
+} from '@mikro-orm/core';
 import { ObjectType, Field, Int } from 'type-graphql';
+import { Updoot } from './Updoot';
 import { User } from './User';
 
 @ObjectType()
@@ -24,6 +31,9 @@ export class Post {
   @Field()
   @ManyToOne(() => User)
   creator: User;
+
+  @OneToMany(() => Updoot, (updoot) => updoot.post, { default: [] })
+  updoots?: Updoot[];
 
   @Field(() => String)
   @Property({ type: 'date' })

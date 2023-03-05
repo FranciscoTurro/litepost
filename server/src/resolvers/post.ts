@@ -17,6 +17,7 @@ import { MyContext } from '../types/types';
 import { User } from '../entities/User';
 import { isAuth } from '../middleware/isAuth';
 import { Loaded } from '@mikro-orm/core';
+import { Updoot } from '../entities/Updoot';
 
 @InputType()
 class PostInput {
@@ -87,7 +88,7 @@ export class PostResolver {
     @Arg('id', () => Int) id: number,
     @Ctx() { em }: MyContext
   ): Promise<Post | null> {
-    return em.findOne(Post, id);
+    return em.findOne(Post, id, { populate: ['creator'] as const });
   }
 
   @Mutation(() => Post)
@@ -130,6 +131,36 @@ export class PostResolver {
     @Ctx() { em }: MyContext
   ): Promise<Boolean> {
     await em.nativeDelete(Post, id);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async vote(
+    @Arg('postId', () => Int) postId: number,
+    @Arg('value', () => Int) value: number,
+    @Ctx() { em, req }: MyContext
+  ) {
+    const user = await em.findOne(User, req.session.userId!);
+    if (!user) return false;
+
+    const post = await em.findOne(Post, postId);
+    if (!post) return false;
+
+    const isUpdoot = value !== -1;
+    const updootValue = isUpdoot ? 1 : -1;
+
+    const updoot = em.create(Updoot, {
+      post,
+      user,
+      value: updootValue,
+    });
+
+    await em.persistAndFlush(updoot);
+
+    post.points! += updootValue;
+
+    await em.persistAndFlush(post);
+
     return true;
   }
 }
