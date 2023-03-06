@@ -1,12 +1,7 @@
-import { empty } from '@apollo/client';
-import { setMaxListeners } from 'events';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { SubmitButton } from '../components/SubmitButton';
-import {
-  useCreatePostMutation,
-  useGetPostsQuery,
-} from '../generated/generated-types';
+import { useCreatePostMutation } from '../generated/generated-types';
 import { PostInput as Post } from '../generated/generated-types';
 import { useIsAuth } from '../utils/useIsAuth';
 
