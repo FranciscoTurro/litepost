@@ -140,26 +140,42 @@ export class PostResolver {
     @Arg('value', () => Int) value: number,
     @Ctx() { em, req }: MyContext
   ) {
+    const isUpdoot = value !== -1;
+    const updootValue = isUpdoot ? 1 : -1;
+
     const user = await em.findOne(User, req.session.userId!);
     if (!user) return false;
 
     const post = await em.findOne(Post, postId);
     if (!post) return false;
 
-    const isUpdoot = value !== -1;
-    const updootValue = isUpdoot ? 1 : -1;
+    const existingUpdoot = await em.findOne(Updoot, { user, post });
 
-    const updoot = em.create(Updoot, {
-      post,
-      user,
-      value: updootValue,
-    });
+    if (existingUpdoot && existingUpdoot.value !== updootValue) {
+      //updoot already exists and the user changed its value
+      existingUpdoot.value = updootValue;
+      await em.persistAndFlush(existingUpdoot);
 
-    await em.persistAndFlush(updoot);
+      post.points = post.points! + updootValue * 2;
+      await em.persistAndFlush(post);
+    } else if (existingUpdoot && existingUpdoot.value === updootValue) {
+      //updoot exists and user clicked on the same value, so the updoot gets removed
+      await em.removeAndFlush(existingUpdoot);
 
-    post.points! += updootValue;
+      post.points = post.points! - updootValue;
+      await em.persistAndFlush(post);
+    } else if (!existingUpdoot) {
+      //updoot doesnt exist
+      const updoot = em.create(Updoot, {
+        post,
+        user,
+        value: updootValue,
+      });
+      await em.persistAndFlush(updoot);
 
-    await em.persistAndFlush(post);
+      post.points! += updootValue;
+      await em.persistAndFlush(post);
+    }
 
     return true;
   }

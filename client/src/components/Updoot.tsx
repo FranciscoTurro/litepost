@@ -1,24 +1,26 @@
 import { ArrowDown } from '../assets/svg/ArrowDown';
 import { ArrowUp } from '../assets/svg/ArrowUp';
-import { useVoteMutation } from '../generated/generated-types';
+import {
+  PostSnippetFragment,
+  useVoteMutation,
+} from '../generated/generated-types';
 
 interface UpdootProps {
-  points: number;
-  postID: number;
+  post: PostSnippetFragment;
 }
 
-export const Updoot: React.FC<UpdootProps> = ({ points, postID }) => {
+export const Updoot: React.FC<UpdootProps> = ({ post }) => {
   const [vote, { loading }] = useVoteMutation();
 
   const handleUpdoot = async () => {
     await vote({
-      variables: { postId: postID, value: 1 },
+      variables: { postId: post._id, value: 1 },
     });
   };
 
   const handleDowndoot = async () => {
     await vote({
-      variables: { postId: postID, value: -1 },
+      variables: { postId: post._id, value: -1 },
     });
   };
 
@@ -27,7 +29,7 @@ export const Updoot: React.FC<UpdootProps> = ({ points, postID }) => {
       <button disabled={loading} onClick={handleUpdoot}>
         <ArrowUp />
       </button>
-      <p className="text-center">{points}</p>
+      <p className="text-center">{post.points}</p>
       <button disabled={loading} onClick={handleDowndoot}>
         <ArrowDown />
       </button>
