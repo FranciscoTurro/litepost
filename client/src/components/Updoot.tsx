@@ -1,18 +1,36 @@
 import { ArrowDown } from '../assets/svg/ArrowDown';
 import { ArrowUp } from '../assets/svg/ArrowUp';
+import { useVoteMutation } from '../generated/generated-types';
 
 interface UpdootProps {
   points: number;
+  postID: number;
 }
 
-//make this take in the info necessary for voting, and handle the mutation here
+export const Updoot: React.FC<UpdootProps> = ({ points, postID }) => {
+  const [vote, { loading }] = useVoteMutation();
 
-export const Updoot: React.FC<UpdootProps> = ({ points }) => {
+  const handleUpdoot = async () => {
+    await vote({
+      variables: { postId: postID, value: 1 },
+    });
+  };
+
+  const handleDowndoot = async () => {
+    await vote({
+      variables: { postId: postID, value: -1 },
+    });
+  };
+
   return (
     <div className="h-full flex flex-col justify-between w-6">
-      <ArrowUp />
+      <button disabled={loading} onClick={handleUpdoot}>
+        <ArrowUp />
+      </button>
       <p className="text-center">{points}</p>
-      <ArrowDown />
+      <button disabled={loading} onClick={handleDowndoot}>
+        <ArrowDown />
+      </button>
     </div>
   );
 };
