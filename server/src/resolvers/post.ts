@@ -42,6 +42,16 @@ export class PostResolver {
     return root.text?.slice(0, 50);
   }
 
+  @FieldResolver(() => String)
+  async voteStatus(@Root() post: Post, @Ctx() { req, em }: MyContext) {
+    if (!req.session.userId) return null;
+    const user = await em.findOne(User, req.session.userId);
+
+    const updoot = await em.findOne(Updoot, { user, post });
+
+    return updoot ? updoot.value : null;
+  }
+
   @Query(() => PaginatedPosts)
   async getPosts(
     @Arg('limit', () => Int) limit: number,

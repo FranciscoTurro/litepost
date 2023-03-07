@@ -80,6 +80,7 @@ export type Post = {
   textSnippet: Scalars['String'];
   title: Scalars['String'];
   updatedAt: Scalars['String'];
+  voteStatus?: Maybe<Scalars['Int']>;
 };
 
 export type PostInput = {
@@ -124,7 +125,7 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type PostSnippetFragment = { __typename?: 'Post', _id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string, points: number, creator: { __typename?: 'User', _id: number, username: string } };
+export type PostSnippetFragment = { __typename?: 'Post', _id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string, points: number, voteStatus?: number | null, creator: { __typename?: 'User', _id: number, username: string } };
 
 export type RegularUserFragment = { __typename?: 'User', _id: number, username: string };
 
@@ -174,7 +175,7 @@ export type GetPostQueryVariables = Exact<{
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', _id: number, createdAt: string, points: number, text: string, title: string, updatedAt: string, creator: { __typename?: 'User', _id: number, username: string } } | null };
+export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', _id: number, createdAt: string, points: number, text: string, title: string, updatedAt: string, voteStatus?: number | null, creator: { __typename?: 'User', _id: number, username: string } } | null };
 
 export type GetPostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -182,7 +183,7 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', _id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string, points: number, creator: { __typename?: 'User', _id: number, username: string } }> } };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', _id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string, points: number, voteStatus?: number | null, creator: { __typename?: 'User', _id: number, username: string } }> } };
 
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
@@ -198,6 +199,7 @@ export const PostSnippetFragmentDoc = gql`
   createdAt
   updatedAt
   points
+  voteStatus
   creator {
     ...RegularUser
   }
@@ -429,6 +431,7 @@ export const GetPostDocument = gql`
     text
     title
     updatedAt
+    voteStatus
     creator {
       ...RegularUser
     }

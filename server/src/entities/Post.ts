@@ -42,4 +42,7 @@ export class Post {
   @Field(() => String)
   @Property({ type: 'date', onUpdate: () => new Date() })
   updatedAt? = new Date();
+
+  @Field(() => Int, { nullable: true })
+  voteStatus?: number | undefined;
 }
