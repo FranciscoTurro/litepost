@@ -3,7 +3,7 @@ import { FormEvent, useState } from 'react';
 import { SubmitButton } from '../components/SubmitButton';
 import { useCreatePostMutation } from '../generated/generated-types';
 import { PostInput as Post } from '../generated/generated-types';
-import { useIsAuth } from '../utils/useIsAuth';
+import { useIsAuth } from '../hooks/useIsAuth';
 
 const CreatePost = () => {
   useIsAuth();

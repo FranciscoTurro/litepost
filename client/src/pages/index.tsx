@@ -2,8 +2,12 @@ import Link from 'next/link';
 import { Post } from '../components/Post';
 import { useGetPostsQuery } from '../generated/generated-types';
 import { ClockLoader } from 'react-spinners';
+import { ScrollTop } from '../components/ScrollTop';
+import { useIsScrolled } from '../hooks/useIsScrolled';
 
 const Home = () => {
+  const isScrolled = useIsScrolled();
+
   const { data, loading, fetchMore, variables } = useGetPostsQuery({
     variables: {
       limit: 10,
@@ -20,6 +24,7 @@ const Home = () => {
 
   return (
     <div className="w-full mt-6 flex flex-col items-center">
+      {isScrolled ? <ScrollTop /> : null}
       <div className="w-2/5 px-2 flex items-center justify-between">
         <h1 className="text-2xl inline font-extrabold leading-none mdl:text-3xl lg:text-4xl">
           Main page
