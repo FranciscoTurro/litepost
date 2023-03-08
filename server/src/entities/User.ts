@@ -1,4 +1,10 @@
-import { Entity, PrimaryKey, Property, OneToMany } from '@mikro-orm/core';
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  OneToMany,
+  Collection,
+} from '@mikro-orm/core';
 import { ObjectType, Field, Int } from 'type-graphql';
 import { Post } from './Post';
 import { Updoot } from './Updoot';
@@ -18,10 +24,10 @@ export class User {
   password!: string; //remove the field property, graphql cant see it
 
   @OneToMany(() => Post, (post) => post.creator)
-  posts?: Post[];
+  posts = new Collection<Post>(this);
 
-  @OneToMany(() => Updoot, (updoot) => updoot.user, { default: [] })
-  updoots?: Updoot[];
+  @OneToMany(() => Updoot, (updoot) => updoot.user)
+  updoots = new Collection<Updoot>(this);
 
   @Field(() => String)
   @Property({ type: 'date' })

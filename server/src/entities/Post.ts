@@ -4,6 +4,7 @@ import {
   Property,
   ManyToOne,
   OneToMany,
+  Collection,
 } from '@mikro-orm/core';
 import { ObjectType, Field, Int } from 'type-graphql';
 import { Updoot } from './Updoot';
@@ -33,7 +34,7 @@ export class Post {
   creator: User;
 
   @OneToMany(() => Updoot, (updoot) => updoot.post, { default: [] })
-  updoots?: Updoot[];
+  updoots = new Collection<Updoot>(this);
 
   @Field(() => String)
   @Property({ type: 'date' })

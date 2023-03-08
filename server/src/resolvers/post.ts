@@ -118,6 +118,9 @@ export class PostResolver {
       creator: user,
     });
 
+    user.posts.add(post);
+    await em.persistAndFlush(user);
+
     await em.persistAndFlush(post);
     return post;
   }
@@ -171,10 +174,10 @@ export class PostResolver {
       await em.persistAndFlush(post);
     } else if (existingUpdoot && existingUpdoot.value === updootValue) {
       //updoot exists and user clicked on the same value, so the updoot gets removed
-      await em.removeAndFlush(existingUpdoot);
-
       post.points = post.points! - updootValue;
       await em.persistAndFlush(post);
+
+      await em.removeAndFlush(existingUpdoot);
     } else if (!existingUpdoot) {
       //updoot doesnt exist
       const updoot = em.create(Updoot, {
@@ -185,7 +188,11 @@ export class PostResolver {
       await em.persistAndFlush(updoot);
 
       post.points! += updootValue;
+      post.updoots.add(updoot);
       await em.persistAndFlush(post);
+
+      user.updoots.add(updoot);
+      await em.persistAndFlush(user);
     }
 
     return true;
