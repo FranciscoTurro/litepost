@@ -11,6 +11,9 @@ interface UpdootSectionProps {
   post: PostSnippetFragment;
 }
 
+const greenHexCode: string = '#00FF00';
+const redHexCode: string = '#FF0000';
+
 const updatePoints = (
   value: number,
   postId: number,
@@ -80,11 +83,11 @@ export const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
   return (
     <div className="h-full flex flex-col justify-between w-6">
       <button disabled={loading} onClick={handleUpdoot}>
-        <ArrowUp color={post.voteStatus === 1 ? 'green' : 'white'} />
+        <ArrowUp color={post.voteStatus === 1 ? greenHexCode : 'white'} />
       </button>
       <p className="text-center">{post.points}</p>
       <button disabled={loading} onClick={handleDowndoot}>
-        <ArrowDown color={post.voteStatus === -1 ? 'red' : 'white'} />
+        <ArrowDown color={post.voteStatus === -1 ? redHexCode : 'white'} />
       </button>
     </div>
   );

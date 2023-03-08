@@ -4,6 +4,8 @@ import {
   useCurrentUserQuery,
   useLogoutMutation,
 } from '../generated/generated-types';
+import icon from '../assets/img/icon.png';
+import Image from 'next/image';
 
 export const Navbar = () => {
   const ApolloClient = useApolloClient();
@@ -17,7 +19,10 @@ export const Navbar = () => {
           className="text-bright_crimson-1 self-center text-4xl font-bold whitespace-nowrap"
           href={'/'}
         >
-          Litepost
+          <div className="flex gap-2">
+            <Image src={icon} alt="test" className="w-11 h-11" />
+            <h1>Litepost</h1>
+          </div>
         </Link>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           {data?.currentUser ? (
