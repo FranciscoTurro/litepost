@@ -11,10 +11,10 @@ export const Navbar = () => {
   const [mutationFunction] = useLogoutMutation();
 
   return (
-    <nav className="text-white bg-atomic_teal-1 px-2 sm:px-4 py-2.5">
+    <nav className="bg-custom_gray-6 px-2 sm:px-4 py-2.5">
       <div className="container flex flex-wrap items-center justify-between mx-auto">
         <Link
-          className="self-center text-4xl font-bold whitespace-nowrap"
+          className="text-bright_crimson-1 self-center text-4xl font-bold whitespace-nowrap"
           href={'/'}
         >
           Litepost
@@ -30,7 +30,7 @@ export const Navbar = () => {
                   mutationFunction();
                   await ApolloClient.resetStore();
                 }}
-                className="block py-2 pl-3 pr-4 rounded md:hover:bg-transparent md:border-0 md:hover:text-gray-400 md:p-0"
+                className="block py-2 pl-3 pr-4 rounded md:hover:bg-transparent md:border-0 md:hover:text-custom_gray-2 md:p-0"
               >
                 Logout
               </button>
@@ -39,7 +39,7 @@ export const Navbar = () => {
             <ul className="flex flex-col p-4 mt-4 border rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
               <li>
                 <Link
-                  className="block py-2 pl-3 pr-4 rounded md:hover:bg-transparent md:border-0 md:hover:text-gray-400 md:p-0"
+                  className="block py-2 pl-3 pr-4 rounded md:hover:bg-transparent md:border-0 md:hover:text-custom_gray-2 md:p-0"
                   href={'/login'}
                 >
                   Login
@@ -47,7 +47,7 @@ export const Navbar = () => {
               </li>
               <li>
                 <Link
-                  className="block py-2 pl-3 pr-4 rounded md:hover:bg-transparent md:border-0 md:hover:text-gray-400 md:p-0"
+                  className="block py-2 pl-3 pr-4 rounded md:hover:bg-transparent md:border-0 md:hover:text-custom_gray-2 md:p-0"
                   href={'/register'}
                 >
                   Register

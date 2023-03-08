@@ -45,11 +45,11 @@ const CreatePost = () => {
               }}
               value={post.title}
               placeholder="title"
-              className={`bg-gray-50 border-2 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:border-bright_crimson-1 block w-full p-2.5 
-            ${emptyTitle ? 'bg-red-400' : null}`}
+              className={`border-2 border-custom_gray-6 outline-none text-sm rounded-lg focus:border-bright_crimson-1 block w-full p-2.5 
+            ${emptyTitle ? 'bg-bright_crimson-1' : 'bg-custom_gray-5'}`}
             />
             {emptyTitle ? (
-              <p className="pl-2 text-red-400">
+              <p className="pl-2 text-bright_crimson-1">
                 Posts can't have an empty title
               </p>
             ) : null}
@@ -60,7 +60,7 @@ const CreatePost = () => {
             }}
             value={post.text}
             placeholder="text"
-            className="h-32 bg-gray-50 border-2 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:border-bright_crimson-1 block w-full p-2.5"
+            className="h-32 bg-custom_gray-5 border-2 outline-none border-custom_gray-6 text-sm rounded-lg focus:border-bright_crimson-1 block w-full p-2.5"
           />
         </div>
         <SubmitButton name="Create post" loading={loading} />

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { PostSnippetFragment } from '../generated/generated-types';
 import { UpdootSection } from './UpdootSection';
 
@@ -7,15 +8,17 @@ interface PostProps {
 
 export const Post: React.FC<PostProps> = ({ post }) => {
   return (
-    <div className="h-36 rounded-md border border-gray-300 m-2 py-5 px-4 flex gap-4 shadow-md">
+    <div className="bg-custom_gray-6 h-36 rounded-md m-2 py-5 px-4 flex gap-4 shadow-md post hover:bg-custom_gray-5 transition-all">
       <UpdootSection post={post} />
-      <div className="flex flex-col gap-2">
-        <div>
-          <h1 className="text-3xl font-semibold">{post.title}</h1>
-          <h2>Posted by {post.creator.username}</h2>
+      <Link className="w-full" href={`post/${post._id}`}>
+        <div className="flex flex-col gap-2">
+          <div>
+            <h1 className="text-3xl font-semibold">{post.title}</h1>
+            <h2>Posted by {post.creator.username}</h2>
+          </div>
+          <p>{post.textSnippet}</p>
         </div>
-        <p>{post.textSnippet}</p>
-      </div>
+      </Link>
     </div>
   );
 };

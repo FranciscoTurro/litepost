@@ -80,11 +80,11 @@ export const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
   return (
     <div className="h-full flex flex-col justify-between w-6">
       <button disabled={loading} onClick={handleUpdoot}>
-        <ArrowUp color={post.voteStatus === 1 ? 'green' : 'black'} />
+        <ArrowUp color={post.voteStatus === 1 ? 'green' : 'white'} />
       </button>
       <p className="text-center">{post.points}</p>
       <button disabled={loading} onClick={handleDowndoot}>
-        <ArrowDown color={post.voteStatus === -1 ? 'red' : 'black'} />
+        <ArrowDown color={post.voteStatus === -1 ? 'red' : 'white'} />
       </button>
     </div>
   );

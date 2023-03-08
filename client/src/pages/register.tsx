@@ -44,11 +44,11 @@ const Register = () => {
                 setUser({ ...user, username: e.target.value });
               }}
               value={user.username}
-              className={`h-12 bg-gray-50 border-2 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:border-bright_crimson-1 block w-full p-2.5
- ${usernameError ? 'bg-red-400' : null}`}
+              className={`h-12 border-2 outline-none border-custom_gray-6 text-sm rounded-lg focus:border-bright_crimson-1 block w-full p-2.5
+ ${usernameError ? 'bg-bright_crimson-1' : 'bg-custom_gray-5 '}`}
             />
             {usernameError ? (
-              <p className="pl-2 text-red-400">{usernameError}</p>
+              <p className="pl-2 text-bright_crimson-1">{usernameError}</p>
             ) : null}
           </div>
         </div>
@@ -63,11 +63,11 @@ const Register = () => {
               value={user.password}
               type="password"
               id="password"
-              className={`h-12 bg-gray-50 border-2 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:border-bright_crimson-1 block w-full p-2.5
- ${passwordError ? 'bg-red-400' : null}`}
+              className={`h-12 border-2 outline-none border-custom_gray-6 text-sm rounded-lg focus:border-bright_crimson-1 block w-full p-2.5
+ ${passwordError ? 'bg-bright_crimson-1' : 'bg-custom_gray-5'}`}
             />
             {passwordError ? (
-              <p className="pl-2 text-red-400">{passwordError}</p>
+              <p className="pl-2 text-bright_crimson-1">{passwordError}</p>
             ) : null}
           </div>
         </div>
