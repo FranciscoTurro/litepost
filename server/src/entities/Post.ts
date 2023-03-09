@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   Collection,
+  Cascade,
 } from '@mikro-orm/core';
 import { ObjectType, Field, Int } from 'type-graphql';
 import { Updoot } from './Updoot';
@@ -33,7 +34,10 @@ export class Post {
   @ManyToOne(() => User)
   creator: User;
 
-  @OneToMany(() => Updoot, (updoot) => updoot.post, { default: [] })
+  @OneToMany(() => Updoot, (updoot) => updoot.post, {
+    cascade: [Cascade.REMOVE],
+    default: [],
+  })
   updoots = new Collection<Updoot>(this);
 
   @Field(() => String)

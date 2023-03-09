@@ -1,14 +1,13 @@
 import { ApolloCache, gql } from '@apollo/client';
 import { ArrowDown } from '../assets/svg/ArrowDown';
 import { ArrowUp } from '../assets/svg/ArrowUp';
-import {
-  PostSnippetFragment,
-  useVoteMutation,
-  VoteMutation,
-} from '../generated/generated-types';
+import { useVoteMutation, VoteMutation } from '../generated/generated-types';
 
 interface UpdootSectionProps {
-  post: PostSnippetFragment;
+  postId: number;
+  points: number;
+  voteStatus: number | null | undefined;
+  isHorizontal?: boolean;
 }
 
 const greenHexCode: string = '#00FF00';
@@ -63,31 +62,40 @@ const updatePoints = (
   }
 };
 
-export const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
+export const UpdootSection: React.FC<UpdootSectionProps> = ({
+  points,
+  postId,
+  voteStatus,
+  isHorizontal,
+}) => {
   const [vote, { loading }] = useVoteMutation();
 
   const handleUpdoot = async () => {
     await vote({
-      variables: { postId: post._id, value: 1 },
-      update: (cache) => updatePoints(1, post._id, cache),
+      variables: { postId: postId, value: 1 },
+      update: (cache) => updatePoints(1, postId, cache),
     });
   };
 
   const handleDowndoot = async () => {
     await vote({
-      variables: { postId: post._id, value: -1 },
-      update: (cache) => updatePoints(-1, post._id, cache),
+      variables: { postId: postId, value: -1 },
+      update: (cache) => updatePoints(-1, postId, cache),
     });
   };
 
   return (
-    <div className="h-full flex flex-col justify-between w-6">
+    <div
+      className={`h-full flex justify-between w-6 ${
+        isHorizontal ? 'gap-3' : ' flex-col'
+      }`}
+    >
       <button disabled={loading} onClick={handleUpdoot}>
-        <ArrowUp color={post.voteStatus === 1 ? greenHexCode : 'white'} />
+        <ArrowUp color={voteStatus === 1 ? greenHexCode : 'white'} />
       </button>
-      <p className="text-center">{post.points}</p>
+      <p className="text-center">{points}</p>
       <button disabled={loading} onClick={handleDowndoot}>
-        <ArrowDown color={post.voteStatus === -1 ? redHexCode : 'white'} />
+        <ArrowDown color={voteStatus === -1 ? redHexCode : 'white'} />
       </button>
     </div>
   );

@@ -1,16 +1,39 @@
 import { useRouter } from 'next/router';
 import { ClockLoader } from 'react-spinners';
-import { useGetPostQuery } from '../../generated/generated-types';
+import { Edit } from '../../assets/svg/Edit';
+import { Trashcan } from '../../assets/svg/Trashcan';
+import { UpdootSection } from '../../components/UpdootSection';
+import {
+  useCurrentUserQuery,
+  useDeletePostMutation,
+  useGetPostQuery,
+} from '../../generated/generated-types';
 
 const PostPage = () => {
   const router = useRouter();
+
   const routerID =
     typeof router.query.id === 'string' ? parseInt(router.query.id) : -1;
+
+  const [deletePost, {}] = useDeletePostMutation();
+
+  const { data: userData } = useCurrentUserQuery();
 
   const { data, loading } = useGetPostQuery({
     skip: routerID === -1,
     variables: { getPostId: routerID },
   });
+
+  const handleDelete = () => {
+    console.log(';asd');
+    deletePost({
+      variables: { deletePostId: data!.getPost!._id },
+      update: (cache) => {
+        cache.evict({ fieldName: 'getPosts:{}' });
+      },
+    });
+    router.push('/');
+  };
 
   if (loading)
     return (
@@ -38,6 +61,26 @@ const PostPage = () => {
         <p className="w-full whitespace-normal break-words">
           {data.getPost.text}
         </p>
+      </div>
+      <div className="w-2/5 pt-4 flex gap-5">
+        <div className="pr-16">
+          <UpdootSection
+            points={data.getPost.points}
+            postId={data.getPost._id}
+            voteStatus={data.getPost.voteStatus}
+            isHorizontal={true}
+          />
+        </div>
+        {data.getPost.creator._id === userData?.currentUser?._id ? (
+          <>
+            <button>
+              <Edit />
+            </button>
+            <button onClick={handleDelete}>
+              <Trashcan />
+            </button>
+          </>
+        ) : null}
       </div>
     </div>
   );

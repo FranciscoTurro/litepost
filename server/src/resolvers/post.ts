@@ -139,11 +139,15 @@ export class PostResolver {
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
   async deletePost(
     @Arg('id', () => Int) id: number,
-    @Ctx() { em }: MyContext
+    @Ctx() { em, req }: MyContext
   ): Promise<Boolean> {
-    await em.nativeDelete(Post, id);
+    const post = await em.findOne(Post, id, { populate: ['updoots'] });
+    if (!post) return false;
+    if (post.creator._id !== req.session.userId) return false;
+    await em.remove(post).flush();
     return true;
   }
 
