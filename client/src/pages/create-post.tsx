@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
+import { text } from 'stream/consumers';
 import { SubmitButton } from '../components/SubmitButton';
 import { useCreatePostMutation } from '../generated/generated-types';
 import { PostInput as Post } from '../generated/generated-types';
@@ -10,6 +11,7 @@ const CreatePost = () => {
 
   const [post, setPost] = useState<Post>({ title: '', text: '' });
   const [emptyTitle, setEmptyTitle] = useState(false);
+  const [textLength, setTextLength] = useState(false);
 
   const [createPost, { loading }] = useCreatePostMutation();
 
@@ -19,6 +21,10 @@ const CreatePost = () => {
     e.preventDefault();
     if (post.title.length === 0) {
       setEmptyTitle(true);
+      return;
+    }
+    if (post.text.length >= 255) {
+      setTextLength(true);
       return;
     }
     await createPost({
@@ -56,14 +62,30 @@ const CreatePost = () => {
           </div>
           <textarea
             onChange={(e) => {
+              setTextLength(false);
               setPost({ ...post, text: e.target.value });
             }}
             value={post.text}
             placeholder="text"
-            className="h-32 bg-custom_gray-5 border-2 outline-none border-custom_gray-6 text-sm rounded-lg focus:border-bright_crimson-1 block w-full p-2.5"
+            className={`h-32 border-2 outline-none border-custom_gray-6 text-sm rounded-lg focus:border-bright_crimson-1 block w-full p-2.5 
+            ${textLength ? 'bg-bright_crimson-1' : 'bg-custom_gray-5 '}`}
           />
+          {textLength ? (
+            <p className="pl-2 text-bright_crimson-1">
+              Posts have a maximum of 255 characters
+            </p>
+          ) : null}
         </div>
-        <SubmitButton name="Create post" loading={loading} />
+        <div className="flex justify-between items-center">
+          <SubmitButton name="Create post" loading={loading} />
+          <p
+            className={`p-2 ${
+              post.text.length >= 255 ? 'text-bright_crimson-1' : null
+            }`}
+          >
+            {post.text.length}/255
+          </p>
+        </div>
       </form>
     </div>
   );

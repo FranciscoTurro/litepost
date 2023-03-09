@@ -28,7 +28,19 @@ const PostPage = () => {
       </div>
     );
 
-  return <div>{JSON.stringify(data)}</div>;
+  return (
+    <div className="pt-10 w-full flex flex-col items-center">
+      <div className="w-2/5 flex flex-col items-center">
+        <h1 className="mb-3 text-3xl font-extrabold leading-none tracking-tight mdl:text-4xl lg:text-5xl">
+          {data.getPost.title}
+        </h1>
+        <div className="border-b w-full border-gray-300 my-2" />
+        <p className="w-full whitespace-normal break-words">
+          {data.getPost.text}
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export default PostPage;

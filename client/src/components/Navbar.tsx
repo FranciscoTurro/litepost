@@ -28,7 +28,9 @@ export const Navbar = () => {
           {data?.currentUser ? (
             <ul className="flex flex-col p-4 mt-4 border rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
               <li className="block py-2 pl-3 pr-4 rounded md:hover:bg-transparent md:border-0 md:p-0">
-                <p className="font-extrabold">{data.currentUser.username}</p>
+                <p className="text-bright_crimson-1 font-extrabold">
+                  {data.currentUser.username}
+                </p>
               </li>
               <button
                 onClick={async () => {
