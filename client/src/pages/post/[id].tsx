@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ClockLoader } from 'react-spinners';
 import { Edit } from '../../assets/svg/Edit';
@@ -74,7 +75,9 @@ const PostPage = () => {
         {data.getPost.creator._id === userData?.currentUser?._id ? (
           <>
             <button>
-              <Edit />
+              <Link href={`/post/edit/${data.getPost?._id}`}>
+                <Edit />
+              </Link>
             </button>
             <button onClick={handleDelete}>
               <Trashcan />

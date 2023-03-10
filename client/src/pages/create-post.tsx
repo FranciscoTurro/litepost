@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
-import { text } from 'stream/consumers';
 import { SubmitButton } from '../components/SubmitButton';
 import { useCreatePostMutation } from '../generated/generated-types';
 import { PostInput as Post } from '../generated/generated-types';

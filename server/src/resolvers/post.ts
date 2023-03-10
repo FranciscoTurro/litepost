@@ -126,14 +126,19 @@ export class PostResolver {
   }
 
   @Mutation(() => Post, { nullable: true })
+  @UseMiddleware(isAuth)
   async updatePost(
     @Arg('id', () => Int) id: number,
     @Arg('title', () => String, { nullable: true }) title: string,
-    @Ctx() { em }: MyContext
+    @Arg('text', () => String, { nullable: true }) text: string,
+    @Ctx() { em, req }: MyContext
   ): Promise<Post | null> {
     const post = await em.findOne(Post, id);
     if (!post) return null;
+    if (post.creator._id !== req.session.userId) return null;
+    if (text.length >= 255) return null;
     post.title = title;
+    post.text = text;
     await em.persistAndFlush(post);
     return post;
   }
