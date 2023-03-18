@@ -8,6 +8,7 @@ import {
   Cascade,
 } from '@mikro-orm/core';
 import { ObjectType, Field, Int } from 'type-graphql';
+import { Comment } from './Comment';
 import { Updoot } from './Updoot';
 import { User } from './User';
 
@@ -39,6 +40,12 @@ export class Post {
     default: [],
   })
   updoots = new Collection<Updoot>(this);
+
+  @OneToMany(() => Comment, (comment) => comment.post, {
+    cascade: [Cascade.REMOVE],
+    default: [],
+  })
+  comments = new Collection<Comment>(this);
 
   @Field(() => String)
   @Property({ type: 'date' })

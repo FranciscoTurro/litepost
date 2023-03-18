@@ -70,6 +70,7 @@ const EditPost = () => {
         <ClockLoader />
       </div>
     );
+
   if (
     currentUserData?.currentUser?._id !== originalPostData?.getPost?.creator._id
   )

@@ -12,6 +12,7 @@ import { createClient } from 'redis';
 import connectRedis from 'connect-redis';
 import session from 'express-session';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { CommentResolver } from './resolvers/comment';
 
 (async () => {
   const orm = await MikroORM.init(mikroOrmConfig);
@@ -45,7 +46,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [PostResolver, UserResolver],
+      resolvers: [PostResolver, UserResolver, CommentResolver],
       validate: false,
     }),
     plugins: [

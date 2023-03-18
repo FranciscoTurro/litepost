@@ -6,6 +6,7 @@ import {
   Collection,
 } from '@mikro-orm/core';
 import { ObjectType, Field, Int } from 'type-graphql';
+import { Comment } from './Comment';
 import { Post } from './Post';
 import { Updoot } from './Updoot';
 
@@ -28,6 +29,9 @@ export class User {
 
   @OneToMany(() => Updoot, (updoot) => updoot.user)
   updoots = new Collection<Updoot>(this);
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments = new Collection<Comment>(this);
 
   @Field(() => String)
   @Property({ type: 'date' })

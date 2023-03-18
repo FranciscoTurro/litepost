@@ -248,6 +248,106 @@
           "updateRule": "cascade"
         }
       }
+    },
+    {
+      "columns": {
+        "_id": {
+          "name": "_id",
+          "type": "serial",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "text": {
+          "name": "text",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "user__id": {
+          "name": "user__id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "post__id": {
+          "name": "post__id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        }
+      },
+      "name": "comment",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "comment_pkey",
+          "columnNames": [
+            "_id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "comment_user__id_foreign": {
+          "constraintName": "comment_user__id_foreign",
+          "columnNames": [
+            "user__id"
+          ],
+          "localTableName": "public.comment",
+          "referencedColumnNames": [
+            "_id"
+          ],
+          "referencedTableName": "public.user",
+          "updateRule": "cascade"
+        },
+        "comment_post__id_foreign": {
+          "constraintName": "comment_post__id_foreign",
+          "columnNames": [
+            "post__id"
+          ],
+          "localTableName": "public.comment",
+          "referencedColumnNames": [
+            "_id"
+          ],
+          "referencedTableName": "public.post",
+          "updateRule": "cascade"
+        }
+      }
     }
   ]
 }
