@@ -48,6 +48,7 @@ export class CommentResolver {
 
   @Query(() => PaginatedComments)
   async getComments(
+    @Arg('postId', () => Int) postId: number,
     @Arg('limit', () => Int) limit: number,
     @Arg('cursor', () => String, { nullable: true }) cursor: string | null,
     @Ctx() { em }: MyContext
@@ -57,26 +58,29 @@ export class CommentResolver {
     let cursorValue;
     let comments: Loaded<Comment, never>[];
 
+    const post = await em.findOne(Post, postId);
+    if (!post) throw new Error('Post not found');
+
     if (cursor) {
       cursorValue = new Date(parseInt(cursor));
 
       comments = await em.find(
         Comment,
-        { createdAt: { $lt: cursorValue } },
+        { post, createdAt: { $lt: cursorValue } },
         {
           orderBy: { createdAt: 'DESC' },
           limit: cappedLimitPlusOne,
-          populate: ['post', 'user'] as const,
+          populate: ['user'] as const,
         }
       );
     } else {
       comments = await em.find(
         Comment,
-        {},
+        { post },
         {
           orderBy: { createdAt: 'DESC' },
           limit: cappedLimitPlusOne,
-          populate: ['post', 'user'] as const,
+          populate: ['user'] as const,
         }
       );
     }

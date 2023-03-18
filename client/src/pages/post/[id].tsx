@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { ClockLoader } from 'react-spinners';
 import { Edit } from '../../assets/svg/Edit';
 import { Trashcan } from '../../assets/svg/Trashcan';
+import { CommentsBox } from '../../components/CommentsBox';
 import { UpdootSection } from '../../components/UpdootSection';
 import {
   useCurrentUserQuery,
@@ -26,7 +27,6 @@ const PostPage = () => {
   });
 
   const handleDelete = () => {
-    console.log(';asd');
     deletePost({
       variables: { deletePostId: data!.getPost!._id },
       update: (cache) => {
@@ -53,7 +53,7 @@ const PostPage = () => {
     );
 
   return (
-    <div className="pt-10 w-full flex flex-col items-center">
+    <div className="pt-10 w-full flex flex-col items-center gap-6">
       <div className="w-2/5 flex flex-col items-center">
         <h1 className="mb-3 text-3xl font-extrabold leading-none tracking-tight mdl:text-4xl lg:text-5xl">
           {data.getPost.title}
@@ -63,7 +63,7 @@ const PostPage = () => {
           {data.getPost.text}
         </p>
       </div>
-      <div className="w-2/5 pt-4 flex gap-5">
+      <div className="w-2/5 flex gap-5">
         <div className="pr-16">
           <UpdootSection
             points={data.getPost.points}
@@ -85,6 +85,7 @@ const PostPage = () => {
           </>
         ) : null}
       </div>
+      <CommentsBox postId={data.getPost._id} />
     </div>
   );
 };

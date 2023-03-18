@@ -41,7 +41,7 @@ const CreatePost = () => {
         <h1 className="mb-4 text-2xl font-extrabold leading-none mdl:text-3xl lg:text-4xl">
           Create a post
         </h1>
-        <div className="mb-6 flex flex-col gap-2">
+        <div className="mb-3 flex flex-col gap-2">
           <div>
             <input
               onChange={(e) => {
