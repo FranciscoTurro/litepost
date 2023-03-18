@@ -3,7 +3,10 @@ import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Navbar } from '../components/Navbar';
-import { PaginatedPosts } from '../generated/generated-types';
+import {
+  PaginatedPosts,
+  PaginatedComments,
+} from '../generated/generated-types';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000/graphql',
@@ -21,6 +24,18 @@ const client = new ApolloClient({
               return {
                 ...incoming,
                 posts: [...(existing?.posts || []), ...incoming.posts],
+              };
+            },
+          },
+          getComments: {
+            keyArgs: [],
+            merge(
+              existing: PaginatedComments | undefined,
+              incoming: PaginatedComments
+            ): PaginatedComments {
+              return {
+                ...incoming,
+                comments: [...(existing?.comments || []), ...incoming.comments],
               };
             },
           },

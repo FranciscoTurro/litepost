@@ -1,0 +1,17 @@
+query getComments($limit: Int!, $cursor: String, $postId: Int!) {
+  getComments(limit: $limit, cursor: $cursor, postId: $postId) {
+    comments {
+      _id
+      text
+      createdAt
+      user {
+        _id
+        username
+      }
+      post {
+        _id
+      }
+    }
+    hasMore
+  }
+}
