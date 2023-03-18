@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/client';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ClockLoader } from 'react-spinners';
@@ -12,6 +13,10 @@ import {
 } from '../../generated/generated-types';
 
 const PostPage = () => {
+  const client = useApolloClient();
+  client.cache.evict({ fieldName: 'getComments' });
+  client.cache.gc();
+
   const router = useRouter();
 
   const routerID =

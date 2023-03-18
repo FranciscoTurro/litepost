@@ -7,15 +7,12 @@ import { useIsAuth } from '../hooks/useIsAuth';
 import { SubmitButton } from './SubmitButton';
 import { Comment } from './Comment';
 import { ClockLoader } from 'react-spinners';
-import { useApolloClient } from '@apollo/client';
-import { useResetComments } from '../hooks/useResetComments';
 
 interface CommentsBoxProps {
   postId: number;
 }
 
 export const CommentsBox: React.FC<CommentsBoxProps> = ({ postId }) => {
-  useResetComments();
   useIsAuth();
 
   const { data, fetchMore, variables } = useGetCommentsQuery({
