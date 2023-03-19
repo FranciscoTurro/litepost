@@ -3,8 +3,6 @@ import {
   useCreateCommentMutation,
   useGetCommentsQuery,
 } from '../generated/generated-types';
-import { useIsAuth } from '../hooks/useIsAuth';
-import { SubmitButton } from './SubmitButton';
 import { Comment } from './Comment';
 import { ClockLoader } from 'react-spinners';
 
@@ -13,8 +11,6 @@ interface CommentsBoxProps {
 }
 
 export const CommentsBox: React.FC<CommentsBoxProps> = ({ postId }) => {
-  useIsAuth();
-
   const { data, fetchMore, variables } = useGetCommentsQuery({
     variables: {
       limit: 10,
@@ -27,6 +23,7 @@ export const CommentsBox: React.FC<CommentsBoxProps> = ({ postId }) => {
 
   const [textLength, setTextLength] = useState(false);
   const [empty, setEmpty] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [comment, setComment] = useState('');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -59,6 +56,8 @@ export const CommentsBox: React.FC<CommentsBoxProps> = ({ postId }) => {
     <div className="w-2/5">
       <form onSubmit={handleSubmit}>
         <textarea
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           value={comment}
           onChange={(e) => {
             setEmpty(false);
@@ -66,11 +65,31 @@ export const CommentsBox: React.FC<CommentsBoxProps> = ({ postId }) => {
             setComment(e.target.value);
           }}
           placeholder="Anything to say?"
-          className={`h-24 border-2 outline-none border-custom_gray-6 text-sm rounded-lg focus:border-bright_crimson-1 block w-full p-2.5 
+          className={`focus:border-bright_crimson-1 rounded-t-lg p-2.5 h-24 border-x-2 border-t-2 outline-none border-custom_gray-6 text-sm block w-full  
             ${
               textLength || empty ? 'bg-bright_crimson-1' : 'bg-custom_gray-5 '
             }`}
         />
+        <div
+          className={`${
+            isFocused ? 'border-bright_crimson-1' : 'border-custom_gray-6'
+          } p-2 flex justify-between bg-custom_gray-6 border-x-2 border-b-2 rounded-b-lg`}
+        >
+          <p
+            className={`${
+              comment.length >= 255 ? 'text-bright_crimson-1' : null
+            }`}
+          >
+            {comment.length}/255
+          </p>
+          <button
+            className="bg-bright_crimson-1 hover:bg-bright_crimson-2 rounded-lg w-24"
+            type="submit"
+            disabled={loading}
+          >
+            Comment
+          </button>
+        </div>
         {textLength ? (
           <p className="pl-2 text-bright_crimson-1">
             Comments have a maximum of 255 characters
@@ -79,21 +98,14 @@ export const CommentsBox: React.FC<CommentsBoxProps> = ({ postId }) => {
         {empty ? (
           <p className="pl-2 text-bright_crimson-1">Comments can't be empty</p>
         ) : null}
-        <div className="flex justify-between items-center">
-          <SubmitButton name="Comment" loading={loading} />
-          <p
-            className={`p-2 ${
-              comment.length >= 255 ? 'text-bright_crimson-1' : null
-            }`}
-          >
-            {comment.length}/255
-          </p>
-        </div>
       </form>
-      <div className="flex flex-col gap-1 mt-4">
+      <div className="flex flex-col gap-2 mt-4 mb-8">
+        <p className="text-lg inline font-extrabold leading-none mdl:text-xl lg:text-2xl">
+          Comments:
+        </p>
         {data?.getComments.comments.map((comment) => (
           <Comment comment={comment} key={comment._id} />
-        ))}{' '}
+        ))}
         {data.getComments.hasMore ? (
           <button
             onClick={() => {
@@ -107,9 +119,9 @@ export const CommentsBox: React.FC<CommentsBoxProps> = ({ postId }) => {
                 },
               });
             }}
-            className="my-6 w-36 h-12 py-2.5 px-5 bg-bright_crimson-1 hover:bg-bright_crimson-2  text-white font-medium rounded-lg text-center"
+            className="my-6 w-36 h-12 py-2.5 px-5 bg-bright_crimson-1 hover:bg-bright_crimson-2 text-sm text-white font-medium rounded-lg text-center"
           >
-            Load more
+            More comments
           </button>
         ) : null}
       </div>

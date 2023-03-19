@@ -3,7 +3,6 @@ mutation CreateComment($text: String!, $postId: Int!) {
     _id
     createdAt
     text
-    updatedAt
     post {
       _id
     }

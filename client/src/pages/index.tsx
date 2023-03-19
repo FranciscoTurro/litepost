@@ -57,7 +57,7 @@ const Home = () => {
           }}
           className="my-6 w-36 h-12 py-2.5 px-5 bg-bright_crimson-1 hover:bg-bright_crimson-2  text-white font-medium rounded-lg text-center"
         >
-          Load more
+          More posts
         </button>
       ) : null}
     </div>
