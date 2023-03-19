@@ -27,8 +27,7 @@ export const Comment: React.FC<CommentProps> = ({ comment }) => {
     <div className="flex justify-between rounded-lg bg-custom_gray-6 p-4 border-2 border-custom_gray-7">
       <div>
         <div className="flex gap-2">
-          <p className="flex gap-1 text-sm text-custom_gray-3 font-extrabold">
-            Posted by
+          <p className="flex text-sm text-custom_gray-3 font-extrabold">
             {isOwner ? (
               <p className="text-bright_crimson-1">{comment.user.username}</p>
             ) : (
