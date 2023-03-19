@@ -64,7 +64,7 @@ const PostPage = () => {
           {data.getPost.title}
         </h1>
         <div className="border-b w-full border-gray-300 my-2" />
-        <p className="w-full text-xl whitespace-normal break-words">
+        <p className="w-full m-3 text-xl whitespace-normal break-words">
           {data.getPost.text}
         </p>
       </div>

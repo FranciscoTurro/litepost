@@ -3,6 +3,7 @@ import {
   PostSnippetFragment,
   useCurrentUserQuery,
 } from '../generated/generated-types';
+import { timeAgo } from '../utils/timeAgo';
 import { UpdootSection } from './UpdootSection';
 
 interface PostProps {
@@ -24,15 +25,20 @@ export const Post: React.FC<PostProps> = ({ post }) => {
       <Link className="w-full" href={`post/${post._id}`}>
         <div className="flex flex-col gap-2">
           <div>
-            <h1 className="text-3xl font-semibold">{post.title}</h1>
-            <h2 className="flex gap-1">
-              Posted by
-              {isOwner ? (
-                <p className="text-bright_crimson-1">{post.creator.username}</p>
-              ) : (
-                <p>{post.creator.username}</p>
-              )}
-            </h2>
+            <h1 className="text-3xl font-bold">{post.title}</h1>
+            <div className="flex gap-2">
+              <h2 className="font-bold">
+                Posted by{' '}
+                {isOwner ? (
+                  <span className="text-bright_crimson-1">
+                    {post.creator.username}
+                  </span>
+                ) : (
+                  <span>{post.creator.username}</span>
+                )}{' '}
+              </h2>
+              {timeAgo(post.createdAt)}
+            </div>
           </div>
           <p>
             {post.textSnippet}

@@ -25,13 +25,15 @@ export const Comment: React.FC<CommentProps> = ({ comment }) => {
 
   return (
     <div className="flex justify-between rounded-lg bg-custom_gray-6 p-4 border-2 border-custom_gray-7">
-      <div>
+      <div className="w-96 whitespace-normal break-words ">
         <div className="flex gap-2">
           <p className="flex text-sm text-custom_gray-3 font-extrabold">
             {isOwner ? (
-              <p className="text-bright_crimson-1">{comment.user.username}</p>
+              <span className="text-bright_crimson-1">
+                {comment.user.username}
+              </span>
             ) : (
-              <p>{comment.user.username}</p>
+              <span>{comment.user.username}</span>
             )}
           </p>
           <p className="text-sm text-custom_gray-3">
