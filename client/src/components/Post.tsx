@@ -1,5 +1,8 @@
 import Link from 'next/link';
-import { PostSnippetFragment } from '../generated/generated-types';
+import {
+  PostSnippetFragment,
+  useCurrentUserQuery,
+} from '../generated/generated-types';
 import { UpdootSection } from './UpdootSection';
 
 interface PostProps {
@@ -7,6 +10,10 @@ interface PostProps {
 }
 
 export const Post: React.FC<PostProps> = ({ post }) => {
+  const { data } = useCurrentUserQuery();
+
+  const isOwner = data?.currentUser?._id !== post.creator._id;
+
   return (
     <div className="bg-custom_gray-6 h-36 rounded-md m-2 py-5 px-4 flex gap-4 shadow-md post hover:bg-custom_gray-5 transition-all">
       <UpdootSection
@@ -18,7 +25,14 @@ export const Post: React.FC<PostProps> = ({ post }) => {
         <div className="flex flex-col gap-2">
           <div>
             <h1 className="text-3xl font-semibold">{post.title}</h1>
-            <h2>Posted by {post.creator.username}</h2>
+            <h2 className="flex gap-1">
+              Posted by
+              {isOwner ? (
+                <p>{post.creator.username}</p>
+              ) : (
+                <p className="text-bright_crimson-1">{post.creator.username}</p>
+              )}
+            </h2>
           </div>
           <p>
             {post.textSnippet}
