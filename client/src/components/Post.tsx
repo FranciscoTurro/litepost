@@ -12,7 +12,7 @@ interface PostProps {
 export const Post: React.FC<PostProps> = ({ post }) => {
   const { data } = useCurrentUserQuery();
 
-  const isOwner = data?.currentUser?._id !== post.creator._id;
+  const isOwner = data?.currentUser?._id === post.creator._id;
 
   return (
     <div className="bg-custom_gray-6 h-36 rounded-md m-2 py-5 px-4 flex gap-4 shadow-md post hover:bg-custom_gray-5 transition-all">
@@ -28,9 +28,9 @@ export const Post: React.FC<PostProps> = ({ post }) => {
             <h2 className="flex gap-1">
               Posted by
               {isOwner ? (
-                <p>{post.creator.username}</p>
-              ) : (
                 <p className="text-bright_crimson-1">{post.creator.username}</p>
+              ) : (
+                <p>{post.creator.username}</p>
               )}
             </h2>
           </div>

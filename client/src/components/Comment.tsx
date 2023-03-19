@@ -15,7 +15,13 @@ export const Comment: React.FC<CommentProps> = ({ comment }) => {
 
   const [deleteComment, { loading }] = useDeleteCommentMutation();
 
-  const isOwner = data?.currentUser!._id !== comment.user._id;
+  let isOwner;
+
+  if (!data?.currentUser) {
+    isOwner = false;
+  } else {
+    isOwner = data.currentUser!._id === comment.user._id;
+  }
 
   return (
     <div className="flex justify-between rounded-lg bg-custom_gray-6 p-4 border-2 border-custom_gray-7">
@@ -24,9 +30,9 @@ export const Comment: React.FC<CommentProps> = ({ comment }) => {
           <p className="flex gap-1 text-sm text-custom_gray-3 font-extrabold">
             Posted by
             {isOwner ? (
-              <p>{comment.user.username}</p>
-            ) : (
               <p className="text-bright_crimson-1">{comment.user.username}</p>
+            ) : (
+              <p>{comment.user.username}</p>
             )}
           </p>
           <p className="text-sm text-custom_gray-3">
@@ -35,7 +41,7 @@ export const Comment: React.FC<CommentProps> = ({ comment }) => {
         </div>
         <p className="text-lg">{comment.text}</p>
       </div>
-      {isOwner ? null : (
+      {isOwner ? (
         <button
           disabled={loading}
           onClick={() => {
@@ -49,7 +55,7 @@ export const Comment: React.FC<CommentProps> = ({ comment }) => {
         >
           <Trashcan />
         </button>
-      )}
+      ) : null}
     </div>
   );
 };
