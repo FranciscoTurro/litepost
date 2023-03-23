@@ -11,7 +11,6 @@ import { UserResolver } from './resolvers/user';
 import { createClient } from 'redis';
 import connectRedis from 'connect-redis';
 import session from 'express-session';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { CommentResolver } from './resolvers/comment';
 
 (async () => {
@@ -22,8 +21,19 @@ import { CommentResolver } from './resolvers/comment';
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redisClient = createClient({ legacyMode: true });
+  const redisClient = createClient({
+    legacyMode: true,
+    url: process.env.REDIS_URL!,
+    username: process.env.REDISUSER!,
+    password: process.env.REDISPASSWORD!,
+    socket: {
+      host: process.env.REDISHOST!,
+      port: parseInt(process.env.REDISPORT!),
+    },
+  });
   await redisClient.connect().catch(console.error);
+
+  app.set('trust proxy', 1);
 
   app.use(
     session({
@@ -36,7 +46,8 @@ import { CommentResolver } from './resolvers/comment';
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,
         sameSite: 'lax',
-        secure: false, //change in prod!
+        secure: true,
+        domain: '.railway.app',
       },
       secret: process.env.SECRET!,
       saveUninitialized: false,
@@ -49,20 +60,13 @@ import { CommentResolver } from './resolvers/comment';
       resolvers: [PostResolver, UserResolver, CommentResolver],
       validate: false,
     }),
-    plugins: [
-      //remove plugins in prod!!
-      ApolloServerPluginLandingPageLocalDefault({
-        footer: false,
-        includeCookies: true,
-      }),
-    ],
   });
   await apolloServer.start();
 
   app.use(
     '/graphql',
     cors<cors.CorsRequest>({
-      origin: 'http://localhost:3000',
+      origin: 'https://litepost-production.up.railway.app',
       credentials: true,
     }),
     json(),
@@ -72,7 +76,7 @@ import { CommentResolver } from './resolvers/comment';
   );
 
   app.listen(process.env.PORT, () => {
-    console.log('-------------------------RUNNING-------------------------');
+    console.log('RUNNING');
   });
 })().catch((err) => {
   console.error(err);

@@ -9,7 +9,7 @@ import {
 } from '../generated/generated-types';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  uri: 'https://litepost-server-production.up.railway.app/graphql',
   credentials: 'include',
   cache: new InMemoryCache({
     typePolicies: {

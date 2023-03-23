@@ -14,9 +14,11 @@ export default {
     glob: '!(*.d).{js,ts}',
   },
   entities: [Post, User, Updoot, Comment],
-  dbName: 'litepost',
+  debug: false,
   type: 'postgresql',
-  debug: true, //change in prod!
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
+  host: process.env.PGHOST!,
+  port: parseInt(process.env.PGPORT!),
+  user: process.env.PGUSER!,
+  password: process.env.PGPASSWORD!,
+  dbName: 'railway',
 } as Parameters<typeof MikroORM.init>[0];
